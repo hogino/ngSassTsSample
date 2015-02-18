@@ -1,3 +1,4 @@
+
 // Generated on 2015-02-16 using generator-angular 0.11.1
 'use strict';
 
@@ -26,6 +27,30 @@ module.exports = function (grunt) {
 
     // Project settings
     yeoman: appConfig,
+
+    typescript: {
+      main: {
+        src: ['dist/scripts/**/*.ts'],
+        dest: 'dist/scripts/app.js',
+        options: {
+          target: 'es5',
+          sourcemap: true,
+          declaration: false
+        }
+      }
+    },
+    bower: {
+      install: {
+        options: {
+          targetDir: 'dist/scripts/libs/',
+          layout: 'byType',
+          install: true,
+          verbose: true,
+          cleanTargetDir: false,
+          cleanBowerDir: false
+        }
+      }
+    },
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
@@ -71,6 +96,11 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
+      // dist: {
+      //   options: {
+      //     base: 'dist'
+      //   }
+      // },
       livereload: {
         options: {
           open: true,
@@ -84,6 +114,10 @@ module.exports = function (grunt) {
               connect().use(
                 '/app/styles',
                 connect.static('./app/styles')
+              ),
+              connect().use(
+                '/dist/scripts',
+                connect.static('./dist/scripts')
               ),
               connect.static(appConfig.app)
             ];
@@ -144,7 +178,10 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/{,*/}*',
             '!<%= yeoman.dist %>/.git{,*/}*'
           ]
-        }]
+        }],
+        src: [
+          'dist/*'
+        ]
       },
       server: '.tmp'
     },
@@ -301,6 +338,27 @@ module.exports = function (grunt) {
     // concat: {
     //   dist: {}
     // },
+    uglify: {
+      dev: {
+        options: {
+          report: 'min',
+          beautify:true,
+          mangle: false,
+          preserveComments: 'some',
+
+          sourceMap: 'dist/scripts/app.min.js.map',
+          sourceMapRoot: '',
+          sourceMappingURL: 'app.min.js.map',
+          // sourceMapIn: 'dist/scripts/app.js.min',
+          sourceMapPrefix: 1
+        },
+        files: {
+          'dist/scripts/app.min.js': [
+            'dist/scripts/app.js'
+          ]
+        }
+      }
+    },
 
     imagemin: {
       dist: {
@@ -395,6 +453,24 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      scripts: {
+        files: [
+          {
+            expand: true,
+            flatten: false,
+            cwd: 'app/scripts',
+            src: ['**/*.ts'],
+            dest: 'dist/scripts'
+          },
+          {
+            expand: true, 
+            flatten: false, 
+            cwd: 'app/d.ts', 
+            src: ['**/*.d.ts'],
+            dest: 'dist/d.ts'
+          }
+        ]
       }
     },
 
