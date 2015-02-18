@@ -19,17 +19,23 @@
 //   });
 module main {
   export interface MainScope extends ng.IScope {
-    content: string;
-    items: string[];
-    add(item:string): void;
+    todo: string;
+    todos: string[];
+    addTodo(): void;
+    removeTodo(index:number): void;
   }
   export class MainCtrl {
 
     constructor(private $scope:MainScope) {
-      $scope.items = [];
-      $scope.add = function (item:string):void {
-        $scope.items.push(item);
-      }
+      $scope.todos = ['Item 1', 'Item 2', 'Item 3'];
+      $scope.addTodo = function ():void {
+        $scope.todos.push($scope.todo);
+        $scope.todo = ""
+      };
+
+      $scope.removeTodo = function (index:number):void {
+      	$scope.todos.splice(index, 1);
+      };
     }
   }
 }
